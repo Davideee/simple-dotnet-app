@@ -1,99 +1,90 @@
 <template>
-    <div class="weather-component">
-        <h1>Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
+  <div class="user-component">
+    <h1>User List</h1>
+    <p>This component demonstrates fetching a list of users from the server.</p>
 
-        <div v-if="loading" class="loading">
-            Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationvue">https://aka.ms/jspsintegrationvue</a> for more details.
-        </div>
-
-        <div v-if="post" class="content">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
-                        <th>Temp. (F)</th>
-                        <th>Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="forecast in post" :key="forecast.date">
-                        <td>{{ forecast.date }}</td>
-                        <td>{{ forecast.temperatureC }}</td>
-                        <td>{{ forecast.temperatureF }}</td>
-                        <td>{{ forecast.summary }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div v-if="loading" class="loading">
+      Loading... Please wait.
     </div>
+
+    <div v-if="users.length > 0" class="content">
+      <table>
+        <thead>
+        <tr>
+          <th>User</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(user, index) in users" :key="index">
+          <td>{{ user }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div v-else>
+      <p>No users found.</p>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 
-    type Forecasts = {
-        date: string,
-        temperatureC: string,
-        temperatureF: string,
-        summary: string
-    }[];
+// Type für die Benutzerliste
+type Users = string[];
 
-    interface Data {
-        loading: boolean,
-        post: null | Forecasts
-    }
+export default defineComponent({
+  setup() {
+    // Reaktive Variablen mit Composition API
+    const loading = ref<boolean>(false);
+    const users = ref<Users>([]);
 
-    export default defineComponent({
-        data(): Data {
-            return {
-                loading: false,
-                post: null
-            };
-        },
-        created() {
-            // fetch the data when the view is created and the data is
-            // already being observed
-            this.fetchData();
-        },
-        watch: {
-            // call again the method if the route changes
-            '$route': 'fetchData'
-        },
-        methods: {
-            fetchData(): void {
-                this.post = null;
-                this.loading = true;
+    // Methode zum Abrufen der Benutzerdaten
+    const fetchData = async () => {
+      loading.value = true;
 
-                fetch('weatherforecast')
-                    .then(r => r.json())
-                    .then(json => {
-                        this.post = json as Forecasts;
-                        this.loading = false;
-                        return;
-                    });
-            }
-        },
+      try {
+        const response = await fetch('api/user');
+        const data = await response.json();
+        users.value = data; // Benutzerliste setzen
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    // Aufrufen der fetchData-Methode, wenn die Komponente gemountet wird
+    onMounted(() => {
+      fetchData();
     });
+
+    // Rückgabe der reaktiven Variablen und Methoden
+    return {
+      loading,
+      users
+    };
+  }
+});
 </script>
 
 <style scoped>
 th {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 th, td {
-    padding-left: .5rem;
-    padding-right: .5rem;
+  padding-left: .5rem;
+  padding-right: .5rem;
 }
 
-.weather-component {
-    text-align: center;
+.user-component {
+  text-align: center;
 }
 
 table {
-    margin-left: auto;
-    margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

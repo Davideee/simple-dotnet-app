@@ -1,16 +1,41 @@
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Model;
+using Model.Services;
+using Model.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
+Env.Load();
 
-var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ??
+var connectionStringUrl = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresTestDbConnectionUrl");
+var connectionString = ConvertPostgresUrlToConnectionString(connectionStringUrl) ??
+                       Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection") ??
                        builder.Configuration.GetConnectionString("DefaultConnection");
+
 
 builder.Services.AddDbContext<SomeContext>(options => { options.UseNpgsql(connectionString); });
 
 builder.Services.AddControllers();
+using (var scope = builder.Services.BuildServiceProvider().CreateScope()) {
+    var dbContext = scope.ServiceProvider.GetRequiredService<SomeContext>();
+
+    try {
+        // Versuche, die Datenbank zu erreichen
+        await dbContext.Database.CanConnectAsync();
+        Console.WriteLine("Database connection successful");
+    }
+    catch (Exception ex) {
+        // Fehlerbehandlung
+        Console.WriteLine($"Database connection failed: {ex.Message}");
+    }
+}
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<IUserService, UserService>();
+
 
 var app = builder.Build();
 
@@ -28,3 +53,15 @@ app.MapControllers();
 app.MapFallbackToFile("/index.html");
 
 app.Run();
+
+string? ConvertPostgresUrlToConnectionString(string? url) {
+    if (string.IsNullOrEmpty(url)) {
+        return null;
+    }
+
+    var uri = new Uri(url);
+    var userInfo = uri.UserInfo.Split(':');
+
+    return
+        $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=True";
+}
