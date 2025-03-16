@@ -13,10 +13,15 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS backend-build
 
 WORKDIR /app/backend
 
-COPY simple-app.Server/simple-app.Server.csproj ./
-RUN dotnet restore
-COPY simple-app.Server/. ./
-RUN dotnet publish -c Release -o /app/publish
+COPY Model/Model.csproj ./Model/
+COPY Web/Web.csproj ./Web/
+
+RUN dotnet restore ./Web/Web.csproj
+
+COPY Model/. ./Model/
+COPY Web/. ./Web/
+
+RUN dotnet publish ./Web/Web.csproj -c Release -o /app/publish
 
 # Endgültiges Image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
@@ -28,4 +33,4 @@ COPY --from=frontend-build /app/frontend/dist /app/wwwroot
 
 EXPOSE 80
 
-ENTRYPOINT ["dotnet", "simple-app.Server.dll"]
+ENTRYPOINT ["dotnet", "Web.dll"] 

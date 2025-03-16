@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "simple-app.Server", "simple-app.Server\simple-app.Server.csproj", "{BE403420-36CD-4D6E-BB39-4EA085E7EB08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{BE403420-36CD-4D6E-BB39-4EA085E7EB08}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "simple-app.client", "simple-app.client\simple-app.client.esproj", "{FE19B050-DDF3-4F9A-A013-DCE8CCF63F2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{5C8F9274-7BFD-4BBE-85BE-0B3D7E7FE0DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{FE19B050-DDF3-4F9A-A013-DCE8CCF63F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE19B050-DDF3-4F9A-A013-DCE8CCF63F2F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE19B050-DDF3-4F9A-A013-DCE8CCF63F2F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5C8F9274-7BFD-4BBE-85BE-0B3D7E7FE0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C8F9274-7BFD-4BBE-85BE-0B3D7E7FE0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C8F9274-7BFD-4BBE-85BE-0B3D7E7FE0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C8F9274-7BFD-4BBE-85BE-0B3D7E7FE0DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

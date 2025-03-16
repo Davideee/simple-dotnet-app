@@ -1,0 +1,52 @@
+# .NET build artifacts
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.log
+*.cache
+*.vs
+.vscode/
+.idea/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider & JetBrains
+.idea/
+*.sln.iml
+
+# ASP.NET HTTPS development certificates
+%APPDATA%/ASP.NET/https/
+~/.aspnet/https/
+
+# dotenv environment files
+.env
+.env.*
+
+# macOS & Linux system files
+.DS_Store
+*.swp
+*.swo
+
+# Paket-Manager
+packages/
+!packages/repositories.config
+
+# Test results
+TestResults/
+
+# Logs
+logs/
+*.log
+
+# Resharper
+_ReSharper.Caches/
+*.DotSettings.user
+
+
+*appsettings
