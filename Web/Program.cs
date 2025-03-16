@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 Env.Load();
 
 var connectionStringUrl = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresTestDbConnectionUrl");
+Console.WriteLine($"connectionStringUrl: {connectionStringUrl}");
 var connectionString = ConvertPostgresUrlToConnectionString(connectionStringUrl) ??
                        Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection") ??
                        builder.Configuration.GetConnectionString("DefaultConnection");
