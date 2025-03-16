@@ -1,6 +1,8 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Model;
+using Model.Repository;
+using Model.Repository.Interfaces;
 using Model.Services;
 using Model.Services.Interfaces;
 
@@ -14,11 +16,11 @@ var connectionString = ConvertPostgresUrlToConnectionString(connectionStringUrl)
                        builder.Configuration.GetConnectionString("DefaultConnection");
 
 
-builder.Services.AddDbContext<SomeContext>(options => { options.UseNpgsql(connectionString); });
+builder.Services.AddDbContext<UserContext>(options => { options.UseNpgsql(connectionString); });
 
 builder.Services.AddControllers();
 using (var scope = builder.Services.BuildServiceProvider().CreateScope()) {
-    var dbContext = scope.ServiceProvider.GetRequiredService<SomeContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<UserContext>();
 
     try {
         // Versuche, die Datenbank zu erreichen
@@ -36,6 +38,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 
 var app = builder.Build();

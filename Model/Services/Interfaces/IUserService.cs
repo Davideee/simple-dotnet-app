@@ -1,5 +1,10 @@
-﻿namespace Model.Services.Interfaces;
+﻿using Model.Contract;
+using Model.Domain;
+
+namespace Model.Services.Interfaces;
 
 public interface IUserService {
-    string[] GetAllUsers();
+    Task<string[]> GetAllUsersAsync();
+    Task RegisterUserAsync(Register registerData);
+    Task<User> LoginUserAsync(Login loginData);
 }

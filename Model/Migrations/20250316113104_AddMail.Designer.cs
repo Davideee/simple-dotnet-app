@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Model.Migrations
 {
-    [DbContext(typeof(SomeContext))]
+    [DbContext(typeof(UserContext))]
     [Migration("20250316113104_AddMail")]
     partial class AddMail
     {

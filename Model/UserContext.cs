@@ -4,10 +4,10 @@ using Model.Persistence.Configuration;
 
 namespace Model;
 
-public class SomeContext : DbContext {
-    public DbSet<User> User { get; set; }
+public class UserContext : DbContext {
+    public DbSet<User?> User { get; set; }
 
-    public SomeContext(DbContextOptions<SomeContext> options)
+    public UserContext(DbContextOptions<UserContext> options)
         : base(options) {
     }
 

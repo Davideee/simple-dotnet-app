@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import {defineComponent, ref, onMounted} from 'vue';
 
 // Type für die Benutzerliste
 type Users = string[];
@@ -45,15 +45,19 @@ export default defineComponent({
       loading.value = true;
 
       try {
-        const response = await fetch('api/user');
+        const response = await fetch('/api/User'); // Der Proxy leitet dies an https://localhost:5065/api/User weiter
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
-        users.value = data; // Benutzerliste setzen
+        users.value = data;
       } catch (error) {
         console.error('Error fetching users:', error);
       } finally {
         loading.value = false;
       }
     };
+
 
     // Aufrufen der fetchData-Methode, wenn die Komponente gemountet wird
     onMounted(() => {

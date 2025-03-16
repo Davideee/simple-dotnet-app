@@ -1,7 +1,6 @@
-import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
+import { fileURLToPath, URL } from 'node:url';
 import plugin from '@vitejs/plugin-vue';
-import { env } from 'process';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,11 +12,14 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '^/weatherforecast': {
-        target: env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-          env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7227',
-        secure: false
-      }
+      '^/api/': {
+        target: process.env.VITE_ASPNETCORE_HTTPS_PORT ?
+          `https://localhost:${process.env.VITE_ASPNETCORE_HTTPS_PORT}` :
+          'https://localhost:5065',
+        changeOrigin: true,
+        secure: false,  // Nur für lokale Entwicklung, in der Produktion müsste das `true` sein.
+        rewrite: (path) => path.replace(/^\/api/, ''),  // API-Pfad so umschreiben, dass die Anfrage korrekt zum Backend geht
+      },
     },
     port: 5173,
   }
